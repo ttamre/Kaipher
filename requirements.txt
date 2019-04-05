@@ -1,6 +1,5 @@
 colorama==0.4.1
 crayons==0.2.0
-DateTime==4.3
 pytz==2018.9
 sockets==1.0.0
 zope.interface==4.6.0
