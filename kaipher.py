@@ -17,52 +17,19 @@ GNU General Public License for more details.
 Filename: Kaipher.py
 Description: Main menu for the kaipher program
 
-Sources used
-https://www.pythonforbeginners.com/code-snippets-source-code/port-scanner-in-python/
-
-Current structure
-    - Everything contained in kaipher.py
-
-Extended structure
-    - Main file: kaipher.py
-    - Port and idle scanner: scanner.py
-    - Extra functionality: ?.py
-
-
 TODO:
-    1) Port project into extended structure
-    2) Learn idle scanning
-    3) Implement idle scanner
-    4) Brainstorm more functionality
+    - Learn idle scanning
+    - Implement idle scanner
+    - Brainstorm more functionality
 """
 
 import argparse
-import crayons
-import os
-import socket
-import subprocess
-import sys
-import time
+import scanner
 
 __author__  = "Tem Tamre"
 __license__ = "GNU GPLv3"
 __version__ = "1.0"
 __status__  = "Dev"
-
-CLEAR_COMMAND = "cls" if os.name == "nt" else "clear"
-TITLE = """
-██╗  ██╗ █████╗ ██╗██████╗ ██╗  ██╗███████╗██████╗ 
-██║ ██╔╝██╔══██╗██║██╔══██╗██║  ██║██╔════╝██╔══██╗
-█████╔╝ ███████║██║██████╔╝███████║█████╗  ██████╔╝
-██╔═██╗ ██╔══██║██║██╔═══╝ ██╔══██║██╔══╝  ██╔══██╗
-██║  ██╗██║  ██║██║██║     ██║  ██║███████╗██║  ██║
-╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-"""
-
-def main():
-    args = parse_arguments()
-    scan = args.idle
-    scan(args.address)
 
 
 def parse_arguments():
@@ -73,13 +40,14 @@ def parse_arguments():
     Return:         args:argparse.Namespace     Parsed args object that contains all passed arguments
     """
     parser = argparse.ArgumentParser(prog="kaipher.py",
-                                    description="Kaipher v{}, a passive network scanning tool".format(__version__),
-                                    epilog="Kaipher Copyright (C) 2019 Tem Tamre.\n "
-                                    "This program comes with ABSOLUTELY NO WARRANTY. "
+                                    description="Kaipher v{}, a passive port scanning tool".format(__version__),
+                                    formatter_class=argparse.RawDescriptionHelpFormatter,
+                                    epilog="Kaipher Copyright (C) 2019 Tem Tamre\n\n"
+                                    "This program comes with ABSOLUTELY NO WARRANTY.\n"
                                     "This is free software, and you are welcome to redistribute it "
-                                    "under conditions met by the {} license. This tool is intended "
+                                    "under conditions met by the {} license.\n\nThis tool is intended "
                                     "to be used as a learning exercise and is not intented for illegal "
-                                    "or otherwise malicious purposes. The creators and maintainers of this "
+                                    "or otherwise malicious purposes.The creators and maintainers of this "
                                     "project assume no responsibility for misuse of this program\n".format(__license__))
 
     parser.add_argument("address",
@@ -87,72 +55,23 @@ def parse_arguments():
                         type=str,
                         help="Address to scan")
 
-    parser.add_argument("-i", "--idle", "--idlescan",
+    parser.add_argument("-i", "--idle",
                         action="store_const",
-                        const=idle_scan,
-                        default=port_scan,
-                        help="Perform an idle scan instead of a standard port scan")
+                        const=scanner.idle_scan,
+                        default=scanner.port_scan,
+                        help="perform an idle scan instead of a standard port scan")
+    
+    parser.add_argument("-f", "--full",
+                        action="store_true",
+                        help="check all 65,335 ports instead of the first 1024")
 
     args = parser.parse_args()
     args.address = args.address[0]
     return args
 
 
-def port_scan(address):
-    """
-    Execute a port scan on the given address
-    Parameter(s):   address:String  Address to scan
-    Return:         None
-    """
-
-    # Clear screen and send title and target address to terminal
-    subprocess.call(CLEAR_COMMAND, shell=True)
-    print(crayons.red(TITLE))
-    remoteServerIP = socket.gethostbyname(address)
-
-    print("Performing port scan on remote host: {}\n".format(crayons.green(remoteServerIP, bold=True)))
-
-    # Scan all ports from 1 to 1024 and time it
-    start = time.time()
-
-    try:
-        for port in range(1,1025):
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            result = sock.connect_ex((remoteServerIP, port))
-
-            if result == 0:
-                print("Port {}:\t{}".format(port, crayons.green("OPEN", bold=True)))
-            
-            sock.close()
-    except KeyboardInterrupt:
-        print("\nKeyboard interrupt. Exiting...")
-        sys.exit()
-    except socket.gaierror:
-        print("Hostname could not be resolved. Exiting...")
-        sys.exit()
-    except socket.error:
-        print("Couldn't connect to server. Exiting...")
-        sys.exit()
-
-    elapsed = time.time() - start
-    elapsed = time.strftime("%H:%M:%S", time.gmtime(elapsed))
-
-    print("\nScanning completed in {}\n".format(crayons.blue(elapsed)))
-
-
-def idle_scan(address):
-    """
-    Execute an idle scan on the given address
-    Parameter(s):   address:String  Address to scan
-    Return:         None
-    """
-
-    # Clear screen and send title and target address to terminal
-    subprocess.call('clear', shell=True)
-    print(crayons.red(TITLE))
-    remoteServerIP = socket.gethostbyname(address)
-
-    print("Performing idle scan on remote host: {}\n".format(crayons.green(remoteServerIP, bold=True)))
 
 if __name__ == "__main__":
-    main()
+    args = parse_arguments()
+    scan = args.idle
+    scan(args.address, args.full)

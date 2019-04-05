@@ -1,5 +1,7 @@
 # Kaipher
-Simple port scanner made in python3
+A simple port scanning tool implemented in python3
+
+**NOTE:** This tool is intended to be used as a learning exercise and is not intented for illegal or otherwise malicious purposes. The creators and maintainers of this project assume no responsibility for misuse of this program
 
 **Status:** In development/testing phase
 
