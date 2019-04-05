@@ -16,10 +16,29 @@ GNU General Public License for more details.
 
 Filename: Kaipher.py
 Description: Main menu for the kaipher program
+
+Sources used
+https://www.pythonforbeginners.com/code-snippets-source-code/port-scanner-in-python/
+
+Current structure
+    - Everything contained in kaipher.py
+
+Extended structure
+    - Main file: kaipher.py
+    - Port and idle scanner: scanner.py
+    - Extra functionality: ?.py
+
+
+TODO:
+    1) Port project into extended structure
+    2) Learn idle scanning
+    3) Implement idle scanner
+    4) Brainstorm more functionality
 """
 
 import argparse
 import crayons
+import os
 import socket
 import subprocess
 import sys
@@ -30,6 +49,7 @@ __license__ = "GNU GPLv3"
 __version__ = "1.0"
 __status__  = "Dev"
 
+CLEAR_COMMAND = "cls" if os.name == "nt" else "clear"
 TITLE = """
 ██╗  ██╗ █████╗ ██╗██████╗ ██╗  ██╗███████╗██████╗ 
 ██║ ██╔╝██╔══██╗██║██╔══██╗██║  ██║██╔════╝██╔══██╗
@@ -50,14 +70,17 @@ def parse_arguments():
     Parse command line arguments
 
     Parameter(s):   None
-    Return:         None
+    Return:         args:argparse.Namespace     Parsed args object that contains all passed arguments
     """
     parser = argparse.ArgumentParser(prog="kaipher.py",
                                     description="Kaipher v{}, a passive network scanning tool".format(__version__),
-                                    epilog="Kaipher Copyright (C) 2019 Tem Tamre"
-                                    "This program comes with ABSOLUTELY NO WARRANTY."
-                                    "This is free software, and you are welcome to redistribute it"
-                                    "under conditions met by the {} license".format(__license__))
+                                    epilog="Kaipher Copyright (C) 2019 Tem Tamre.\n "
+                                    "This program comes with ABSOLUTELY NO WARRANTY. "
+                                    "This is free software, and you are welcome to redistribute it "
+                                    "under conditions met by the {} license. This tool is intended "
+                                    "to be used as a learning exercise and is not intented for illegal "
+                                    "or otherwise malicious purposes. The creators and maintainers of this "
+                                    "project assume no responsibility for misuse of this program\n".format(__license__))
 
     parser.add_argument("address",
                         nargs=1,
@@ -72,7 +95,6 @@ def parse_arguments():
 
     args = parser.parse_args()
     args.address = args.address[0]
-
     return args
 
 
@@ -84,11 +106,11 @@ def port_scan(address):
     """
 
     # Clear screen and send title and target address to terminal
-    subprocess.call('clear', shell=True)
+    subprocess.call(CLEAR_COMMAND, shell=True)
     print(crayons.red(TITLE))
     remoteServerIP = socket.gethostbyname(address)
 
-    print("Scanning remote host: {}\n".format(crayons.green(remoteServerIP, bold=True)))
+    print("Performing port scan on remote host: {}\n".format(crayons.green(remoteServerIP, bold=True)))
 
     # Scan all ports from 1 to 1024 and time it
     start = time.time()
@@ -118,14 +140,19 @@ def port_scan(address):
     print("\nScanning completed in {}\n".format(crayons.blue(elapsed)))
 
 
-def idle_scan():
+def idle_scan(address):
     """
     Execute an idle scan on the given address
     Parameter(s):   address:String  Address to scan
     Return:         None
     """
-    return "Idle scan"
 
+    # Clear screen and send title and target address to terminal
+    subprocess.call('clear', shell=True)
+    print(crayons.red(TITLE))
+    remoteServerIP = socket.gethostbyname(address)
+
+    print("Performing idle scan on remote host: {}\n".format(crayons.green(remoteServerIP, bold=True)))
 
 if __name__ == "__main__":
     main()
