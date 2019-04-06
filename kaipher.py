@@ -20,6 +20,7 @@ Description: Main menu for the kaipher program
 TODO:
     - Learn idle scanning
     - Implement idle scanner
+    - Test & release v1.0
     - Brainstorm more functionality
 """
 
@@ -47,23 +48,23 @@ def parse_arguments():
                                     "This is free software, and you are welcome to redistribute it "
                                     "under conditions met by the {} license.\n\nThis tool is intended "
                                     "to be used as a learning exercise and is not intented for illegal "
-                                    "or otherwise malicious purposes.The creators and maintainers of this "
-                                    "project assume no responsibility for misuse of this program\n".format(__license__))
+                                    "or otherwise malicious purposes. The creators and maintainers of this "
+                                    "project assume no responsibility for misuse of this program.\n".format(__license__))
 
     parser.add_argument("address",
                         nargs=1,
                         type=str,
-                        help="Address to scan")
+                        help="address to scan")
 
-    parser.add_argument("-i", "--idle",
-                        action="store_const",
-                        const=scanner.idle_scan,
-                        default=scanner.port_scan,
-                        help="perform an idle scan instead of a standard port scan")
     
-    parser.add_argument("-f", "--full",
+    group = parser.add_mutually_exclusive_group(required=False)
+    group.add_argument("-f", "--full",
                         action="store_true",
                         help="check all 65,335 ports instead of the first 1024")
+    
+    group.add_argument("-p", "--port",
+                        type=int,
+                        help="specify an individual port to check")
 
     args = parser.parse_args()
     args.address = args.address[0]
@@ -74,4 +75,5 @@ def parse_arguments():
 if __name__ == "__main__":
     args = parse_arguments()
     scan = args.idle
-    scan(args.address, args.full)
+    print(args)
+    scan(args.address, args.full, args.port)

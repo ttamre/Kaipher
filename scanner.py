@@ -15,7 +15,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 Filename: scanner.py
-Description: Port and idle scanners
+Description: Port scanner functionality
 
 Sources used
 https://www.pythonforbeginners.com/code-snippets-source-code/port-scanner-in-python/
@@ -39,7 +39,7 @@ TITLE = """
 """
 
 
-def port_scan(address, full_scan):
+def port_scan(address, full_scan, port_number):
     """
     Execute a port scan on the given address
     Parameter(s):   address:String  Address to scan
@@ -64,7 +64,14 @@ def port_scan(address, full_scan):
     # Scan all ports from 1 to 1024 and time it
     start = time.time()
     try:
-        ports_to_scan = range(1,63336) if full_scan else range(1,1025)
+        # Handle the range of ports to scan (regular scan, full scan, or scan on a single port)
+        if full_scan:
+            ports_to_scan = range(1,63336)
+        elif port_number:
+            ports_to_scan = [int(port_number)]
+        else:
+            ports_to_scan = range(1,1025)
+
         for port in ports_to_scan:
             sock = socket.socket(ip_version, socket.SOCK_STREAM)
             result = sock.connect_ex((remoteServerIP, port))
@@ -88,21 +95,6 @@ def port_scan(address, full_scan):
     elapsed = time.time() - start
     elapsed = time.strftime("%H:%M:%S", time.gmtime(elapsed))
     print("\nScanning completed in {}\n".format(crayons.blue(elapsed)))
-
-
-def idle_scan(address, full_scan):
-    """
-    Execute an idle scan on the given address
-    Parameter(s):   address:String  Address to scan
-    Return:         None
-    """
-
-    # Clear screen and send title and target address to terminal
-    subprocess.call('clear', shell=True)
-    print(crayons.red(TITLE))
-    remoteServerIP = socket.gethostbyname(address)
-
-    print("Performing idle scan on remote host: {}\n".format(crayons.green(remoteServerIP, bold=True)))
 
 
 def is_ipv6(address):
