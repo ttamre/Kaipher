@@ -29,7 +29,7 @@ import scanner
 
 __author__  = "Tem Tamre"
 __license__ = "GNU GPLv3"
-__version__ = "1.0"
+__version__ = "1.1"
 __status__  = "Dev"
 
 
@@ -55,13 +55,16 @@ def parse_arguments():
                         nargs=1,
                         type=str,
                         help="address to scan")
-
+    parser.add_argument("-i", "--idle",
+                        action="store_const",
+                        const=scanner.idle_scan,
+                        default=scanner.port_scan,
+                        help="perform an idle scan instead of a standard port scan")
     
     group = parser.add_mutually_exclusive_group(required=False)
     group.add_argument("-f", "--full",
                         action="store_true",
                         help="check all 65,335 ports instead of the first 1024")
-    
     group.add_argument("-p", "--port",
                         type=int,
                         help="specify an individual port to check")

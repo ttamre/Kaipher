@@ -97,6 +97,16 @@ def port_scan(address, full_scan, port_number):
     print("\nScanning completed in {}\n".format(crayons.blue(elapsed)))
 
 
+def idle_scan(address, full_scan, port_number):
+    """
+    Execute a port scan on the given address
+    Parameter(s):   address:String  Address to scan
+    Return:         None
+    """
+
+    return 0
+
+
 def is_ipv6(address):
     """
     Check if the given address is a valid IPv6 address
