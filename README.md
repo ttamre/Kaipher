@@ -3,7 +3,7 @@ A simple port scanning tool implemented in python3
 
 **NOTE:** This tool is intended to be used as a learning exercise and is not intented for illegal or otherwise malicious purposes. The creators and maintainers of this project assume no responsibility for misuse of this program
 
-**Status:** In development/testing phase
+**Status:** Version 1.0 released
 
 
 ### Running kaipher
