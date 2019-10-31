@@ -34,6 +34,12 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
 
+      - run:
+          name: Set environment variables
+          command:
+            echo 'export TERM=linux' >> $BASH_ENV
+
+
       - save_cache:
           paths:
             - ./venv
