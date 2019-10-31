@@ -39,7 +39,7 @@ class TestKaipher(unittest.TestCase):
     def test_port_scan_partial(self):
         address = socket.gethostbyname(socket.gethostname())
         full_scan = False
-        port_number = 80
+        port_number = 40068
         
         try:
             scanner.port_scan(address=address, full_scan=full_scan, port_number=port_number)
