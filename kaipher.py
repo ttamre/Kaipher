@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 Kaipher
 Copyright (C) 2019 Tem Tamre

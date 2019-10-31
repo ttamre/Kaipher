@@ -83,13 +83,13 @@ def port_scan(address, full_scan, port_number):
 
     except KeyboardInterrupt:
         print("\nKeyboard interrupt. Exiting...")
-        sys.exit()
+        return
     except socket.gaierror:
         print("Hostname could not be resolved. Exiting...")
-        sys.exit()
+        return
     except socket.error:
         print("Couldn't connect to server. Exiting...")
-        sys.exit()
+        return
 
     # Print elapsed time
     elapsed = time.time() - start
@@ -104,7 +104,7 @@ def idle_scan(address, full_scan, port_number):
     Return:         None
     """
 
-    return 0
+    return True
 
 
 def is_ipv6(address):
