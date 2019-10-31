@@ -118,3 +118,6 @@ def is_ipv6(address):
         return True
     except OSError:
         return False
+    except TypeError:
+        print(f"Invalid type {type(address)} - only strings are accepted")
+        return False
