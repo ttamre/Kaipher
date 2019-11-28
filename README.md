@@ -1,4 +1,6 @@
 # Kaipher
+[![CircleCI](https://circleci.com/gh/ttamre/Kaipher/tree/master.svg?style=svg)](https://circleci.com/gh/ttamre/Kaipher/tree/master)
+
 A simple port scanning tool implemented in python3
 
 **NOTE:** This tool is intended to be used as a learning exercise and is not intented for illegal or otherwise malicious purposes. The creators and maintainers of this project assume no responsibility for misuse of this program
